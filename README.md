@@ -1,2 +1,2 @@
 # SIKAT_APP
-Android Base
+Android Base untuk tugas besar Pemrograman aplikasi bergerak
