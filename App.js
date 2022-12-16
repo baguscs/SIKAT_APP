@@ -1,20 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from "react";
 
-export default function App() {
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import Icon from "react-native-vector-icons";
+
+import { Splash, Onboard, Login } from "./src/screens/Index";
+
+const Stack = createNativeStackNavigator();
+const Tab = createMaterialBottomTabNavigator();
+function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Splash"
+        screenOptions={{ headerShown: false }}
+      >
+        <Stack.Screen name="Splash" component={Splash}></Stack.Screen>
+        <Stack.Screen name="Onboard" component={Onboard}></Stack.Screen>
+        <Stack.Screen name="Login" component={Login}></Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
