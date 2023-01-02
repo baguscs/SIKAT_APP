@@ -40,7 +40,6 @@ class Add_Dana extends Component {
       countData = value.length;
     }
 
-    console.log(this.state.dataDana);
     this.pushOnlist(countData);
   };
 
