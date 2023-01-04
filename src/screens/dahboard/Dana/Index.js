@@ -89,7 +89,13 @@ class Index extends Component {
               <Center>
                 <Link
                   onPress={() =>
-                    this.props.navigation.navigate("Dana_Edit", {})
+                    this.props.navigation.navigate("Dana_Edit", {
+                      indexData: index,
+                      category: item.category,
+                      dana: item.dana,
+                      desc: item.desc,
+                      date: item.date,
+                    })
                   }
                 >
                   <Box w="320" h="90px" backgroundColor="#FFFFFF" mt="2px">
