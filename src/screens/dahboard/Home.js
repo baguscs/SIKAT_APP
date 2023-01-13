@@ -22,7 +22,10 @@ class Home extends Component {
     super(props);
     this.state = {
       refresh: false,
+      dana: "",
     };
+
+    this.url = "http://192.168.43.181/api_sikat/dashboard.php";
   }
 
   backAction = () => {
@@ -49,10 +52,22 @@ class Home extends Component {
 
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.backAction);
+    this.getTotalData();
   }
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.backAction);
+  }
+
+  async getTotalData() {
+    await fetch(this.url)
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({ dana: json.data.dana });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   render() {
@@ -110,7 +125,7 @@ class Home extends Component {
                   </Text>
                 </Flex>
                 <Text ml="100px" mt="-40px" fontSize="2xl" color="#FFFFFF">
-                  Rp. 7.000.000
+                  Rp. {this.state.dana}
                 </Text>
               </Box>
             </Link>

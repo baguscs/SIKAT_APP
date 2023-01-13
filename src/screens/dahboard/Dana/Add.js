@@ -15,82 +15,58 @@ import {
   CheckIcon,
 } from "native-base";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class Add_Dana extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      category: "",
       id: "",
+      category: "",
       dana: "",
       desc: "",
       date: "",
-      dataDana: [],
     };
+
+    this.url = "http://192.168.43.181/api_sikat/dana.php";
   }
 
-  checkList = async () => {
-    let value = await AsyncStorage.getItem("@DanaSikat");
-    value = JSON.parse(value);
-    var countData = null;
+  insertData = () => {
+    const { category } = this.state;
+    const { dana } = this.state;
+    const { desc } = this.state;
+    const { date } = this.state;
 
-    if (value !== null) {
-      this.setState({ dataDana: value });
-      countData = value.length;
-    }
-
-    this.pushOnlist(countData);
-  };
-
-  pushOnlist = async (lengthList) => {
-    const prevData = this.state.dataDana;
-
-    if (lengthList === null) {
-      this.setState({
-        dataDana: [
-          ...prevData,
-          {
-            id: 1,
-            category: this.state.category,
-            dana: this.state.dana,
-            desc: this.state.desc,
-            date: this.state.date,
-          },
-        ],
-      });
+    var urlAction = this.url + "/?operation=create";
+    if (category == "" || dana == "" || desc == "" || date == "") {
+      alert("Data belum lengkap");
     } else {
-      this.setState({
-        dataDana: [
-          ...prevData,
-          {
-            id: lengthList + 1,
-            category: this.state.category,
-            dana: this.state.dana,
-            desc: this.state.desc,
-            date: this.state.date,
-          },
-        ],
-      });
-    }
-
-    this.saveData();
-  };
-
-  saveData = async () => {
-    try {
-      await AsyncStorage.setItem(
-        "@DanaSikat",
-        JSON.stringify(this.state.dataDana)
-      );
-      Alert.alert("Sukses", "Data berhasil disimpan", [
-        {
-          text: "Oke",
-          onPress: () => this.props.navigation.navigate("Dana_Home"),
+      fetch(urlAction, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-      ]);
-    } catch (e) {
-      console.log("save error ", e);
+        body:
+          "kategori=" +
+          category +
+          "&jumlah=" +
+          dana +
+          "&keterangan=" +
+          desc +
+          "&tanggal=" +
+          date,
+      })
+        .then((response) => response.json())
+        .then((responseJSON) => {
+          Alert.alert("Sukses", "Data berhasil disimpan", [
+            {
+              text: "Oke",
+              onPress: () => this.props.navigation.navigate("Dana_Home"),
+            },
+          ]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
@@ -190,7 +166,7 @@ class Add_Dana extends Component {
               _text={{ color: "#FFFFFF", fontSize: 15 }}
               backgroundColor="#00A187"
               borderRadius={20}
-              onPress={() => this.checkList()}
+              onPress={this.insertData}
             >
               Simpan
             </Button>

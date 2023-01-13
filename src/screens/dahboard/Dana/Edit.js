@@ -16,62 +16,95 @@ import {
 } from "native-base";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
 class Edit_Dana extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      index: this.props.route.params.indexData,
+      id: this.props.route.params.id,
       category: this.props.route.params.category,
       dana: this.props.route.params.dana,
       desc: this.props.route.params.desc,
       date: this.props.route.params.date,
-      dataDana: [],
     };
+
+    this.url = "http://192.168.43.181/api_sikat/dana.php";
   }
 
-  collectData = async () => {
-    let value = await AsyncStorage.getItem("@DanaSikat");
-    value = JSON.parse(value);
+  updateData = () => {
+    const { id } = this.state;
+    const { category } = this.state;
+    const { dana } = this.state;
+    const { desc } = this.state;
+    const { date } = this.state;
 
-    if (value !== null) {
-      this.setState({ dataDana: value });
-    }
-
-    this.changeData();
-  };
-
-  changeData = () => {
-    let data = this.state.dataDana;
-
-    data[this.state.index].category = this.state.category;
-    data[this.state.index].dana = this.state.dana;
-    data[this.state.index].desc = this.state.desc;
-    data[this.state.index].date = this.state.date;
-
-    this.setState({ dataDana: data });
-
-    console.log(this.state.dataDana);
-    this.updateData();
-  };
-
-  updateData = async () => {
-    try {
-      await AsyncStorage.setItem(
-        "@DanaSikat",
-        JSON.stringify(this.state.dataDana)
-      );
-      Alert.alert("Sukses", "Data berhasil disimpan", [
-        {
-          text: "Oke",
-          onPress: () => this.props.navigation.navigate("Dana_Home"),
+    var urlAction = this.url + "/?operation=update&id=" + id;
+    if (category == "" || dana == "" || desc == "" || date == "") {
+      alert("Data belum lengkap");
+    } else {
+      fetch(urlAction, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-      ]);
-    } catch (e) {
-      console.log("save error ", e);
+        body:
+          "kategori=" +
+          category +
+          "&jumlah=" +
+          dana +
+          "&keterangan=" +
+          desc +
+          "&tanggal=" +
+          date,
+      })
+        .then((response) => response.json())
+        .then((responseJSON) => {
+          Alert.alert("Sukses", "Data berhasil di update", [
+            {
+              text: "Oke",
+              onPress: () => this.props.navigation.navigate("Dana_Home"),
+            },
+          ]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
+
+  confirmDelete = (id) => {
+    const idDana = id;
+    Alert.alert(
+      "Peringatan!",
+      "Data akan dihapus secara permanen, apakah anda yakin?",
+      [
+        {
+          text: "Batal",
+          onPress: null,
+        },
+        {
+          text: "Yakin",
+          onPress: () => this.deleteData(idDana),
+        },
+      ]
+    );
+  };
+
+  async deleteData(id) {
+    var urlDestroy = this.url + "/?operation=delete&id=" + id;
+    await fetch(urlDestroy)
+      .then((response) => response.json())
+      .then((json) => {
+        Alert.alert("Sukses", "Data berhasil di hapus", [
+          {
+            text: "Oke",
+            onPress: () => this.props.navigation.navigate("Dana_Home"),
+          },
+        ]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   render() {
     return (
@@ -96,7 +129,7 @@ class Edit_Dana extends Component {
             >
               Edit Dana
             </Text>
-            <Link>
+            <Link onPress={() => this.confirmDelete(this.state.id)}>
               <Ionicons
                 style={styles.iconTrash}
                 name="trash-outline"
@@ -174,7 +207,7 @@ class Edit_Dana extends Component {
               _text={{ color: "#FFFFFF", fontSize: 15 }}
               backgroundColor="#00A187"
               borderRadius={20}
-              onPress={() => this.collectData()}
+              onPress={this.updateData}
             >
               Simpan
             </Button>

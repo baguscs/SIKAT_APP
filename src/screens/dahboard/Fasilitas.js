@@ -73,38 +73,6 @@ class Fasilitas extends Component {
               <Flex direction="row">
                 <Ionicons
                   style={styles.iconFacility}
-                  name="ios-newspaper-outline"
-                  size={45}
-                  color={"#00A187"}
-                />
-                <Text fontSize="xl" ml="15px" mt="8px" fontWeight="bold">
-                  Aduan
-                </Text>
-                <Ionicons
-                  style={styles.iconForward}
-                  name="ios-chevron-forward-outline"
-                  size={45}
-                  color={"#00A187"}
-                />
-              </Flex>
-              <Text fontSize="13px" mt="-25px" pr="30px" ml="80px">
-                Melapor permasalahan di sekitar dengan mudah!
-              </Text>
-            </Box>
-          </Link>
-          <Link
-            onPress={() => this.props.navigation.navigate("DetailFasilitas")}
-          >
-            <Box
-              w="320"
-              h="100"
-              backgroundColor="#FFFFFF"
-              mt="20px"
-              borderRadius="20px"
-            >
-              <Flex direction="row">
-                <Ionicons
-                  style={styles.iconFacility}
                   name="ios-calendar-outline"
                   size={45}
                   color={"#00A187"}
