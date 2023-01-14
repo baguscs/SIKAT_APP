@@ -3,17 +3,14 @@ import { StyleSheet, BackHandler, Alert, RefreshControl } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import {
   NativeBaseProvider,
-  ScrollView,
   Center,
   Image,
-  VStack,
   Text,
   Box,
-  Button,
   Flex,
   Link,
-  Input,
-  Stack,
+  FlatList,
+  ScrollView,
 } from "native-base";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -23,6 +20,7 @@ class Home extends Component {
     this.state = {
       refresh: false,
       dana: "",
+      agenda: [],
     };
 
     this.url = "http://192.168.43.181/api_sikat/dashboard.php";
@@ -53,17 +51,38 @@ class Home extends Component {
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.backAction);
     this.getTotalData();
+    this.getAgenda();
   }
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.backAction);
   }
 
+  onRefresh = () => {
+    this.setState({ refresh: true }, () => {
+      setTimeout(() => {
+        this.componentDidMount();
+        this.setState({ refresh: false });
+      }, 900);
+    });
+  };
+
   async getTotalData() {
-    await fetch(this.url)
+    await fetch(this.url + "/?data=dana")
       .then((response) => response.json())
       .then((json) => {
-        this.setState({ dana: json.data.dana });
+        this.setState({ dana: json.totalDana.dana });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async getAgenda() {
+    await fetch(this.url + "/?data=agenda")
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({ agenda: json.data.agenda });
       })
       .catch((error) => {
         console.log(error);
@@ -75,13 +94,14 @@ class Home extends Component {
       <NativeBaseProvider>
         <StatusBar style="auto" />
         <ScrollView
+          nestedScrollEnabled={true}
           backgroundColor="#F4F6F9"
           refreshControl={
             <RefreshControl
               refreshing={this.state.refresh}
               onRefresh={() => {
-                console.log("refreshing");
-                this.setState({ refresh: false });
+                // this.setState({ refresh: false });
+                this.onRefresh();
               }}
             ></RefreshControl>
           }
@@ -96,12 +116,9 @@ class Home extends Component {
                 alt=""
               ></Image>
             </Link>
-            <Text fontSize="md" fontWeight="700" ml="10px" mt="15px">
+            <Text fontSize="20px" fontWeight="700" ml="20px" mt="15px">
               Bagus Cahyo Sulistiyo
             </Text>
-            <Link mt="10px" ml="50px">
-              <Ionicons name="ios-notifications" size={33} color={"#00A187"} />
-            </Link>
           </Flex>
           <Center mt="20px">
             <Link onPress={() => this.props.navigation.navigate("Dana_Home")}>
@@ -165,142 +182,51 @@ class Home extends Component {
               </Text>
             </Link>
           </Flex>
-          <Center>
-            <Link>
-              <Box
-                w="320"
-                h="140"
-                p="2"
-                mt="20px"
-                borderTopRadius={20}
-                bg="#FFFFFF"
-                shadow={2}
-              >
-                <Flex direction="row">
-                  <Image
-                    resizeMode="contain"
-                    w="120px"
-                    h="90px"
-                    alt=""
-                    mt={4}
-                    borderRadius={10}
-                    source={require("../../img/rapat.jpg")}
-                  ></Image>
-                  <Text
-                    fontSize="13"
-                    color="#000000"
-                    mt="1"
-                    fontWeight="bold"
-                    ml="2"
-                    pr="100px"
-                  >
-                    Rapat pertanggung jawaban dana desa
-                  </Text>
-                </Flex>
-                <Text ml="130px" mt="-65px" fontSize="xs">
-                  Duis occaecat enim excepteur cupidatat voluptate Consectetur
-                  quis...
-                </Text>
-                <Flex direction="row">
-                  <Ionicons
-                    style={styles.iconTime}
-                    name="ios-time-outline"
-                    size={13}
-                    color={"#8D8DAA"}
-                  />
-                  <Text fontSize="10px" mt="5px" ml="5px">
-                    15 menit yang lalu
-                  </Text>
-                </Flex>
-              </Box>
-            </Link>
-            <Link>
-              <Box w="320" h="140" p="2" bg="#FFFFFF" shadow={2}>
-                <Flex direction="row">
-                  <Image
-                    resizeMode="contain"
-                    w="120px"
-                    h="90px"
-                    alt=""
-                    mt={4}
-                    borderRadius={10}
-                    source={require("../../img/present.jpg")}
-                  ></Image>
-                  <Text
-                    fontSize="13"
-                    color="#000000"
-                    mt="1"
-                    fontWeight="bold"
-                    ml="2"
-                    pr="100px"
-                  >
-                    Sosialisasi pencegahan DBD
-                  </Text>
-                </Flex>
-                <Text ml="130px" mt="-65px" fontSize="xs">
-                  Duis occaecat enim excepteur cupidatat voluptate Consectetur
-                  quis...
-                </Text>
-                <Flex direction="row">
-                  <Ionicons
-                    style={styles.iconTime}
-                    name="ios-time-outline"
-                    size={13}
-                    color={"#8D8DAA"}
-                  />
-                  <Text fontSize="10px" mt="5px" ml="5px">
-                    30 menit yang lalu
-                  </Text>
-                </Flex>
-              </Box>
-            </Link>
-            <Link>
-              <Box
-                w="320"
-                h="140"
-                p="2"
-                borderBottomRadius={20}
-                bg="#FFFFFF"
-                shadow={2}
-              >
-                <Flex direction="row">
-                  <Image
-                    resizeMode="contain"
-                    w="120px"
-                    h="90px"
-                    alt=""
-                    mt={4}
-                    borderRadius={10}
-                    source={require("../../img/cleaning.jpg")}
-                  ></Image>
-                  <Text
-                    fontSize="13"
-                    color="#000000"
-                    mt="1"
-                    fontWeight="bold"
-                    ml="2"
-                    pr="100px"
-                  >
-                    Kerja bakti bulanan warga
-                  </Text>
-                </Flex>
-                <Text ml="130px" mt="-65px" fontSize="xs">
-                  Duis occaecat enim excepteur cupidatat voluptate Consectetur
-                  quis...
-                </Text>
-                <Flex direction="row">
-                  <Ionicons
-                    style={styles.iconTime}
-                    name="ios-time-outline"
-                    size={13}
-                    color={"#8D8DAA"}
-                  />
-                  <Text fontSize="10px" mt="5px" ml="5px">
-                    55 menit yang lalu
-                  </Text>
-                </Flex>
-              </Box>
-            </Link>
+          <Center mt="10px">
+            <FlatList
+              nestedScrollEnabled
+              data={this.state.agenda}
+              renderItem={({ item, index }) => (
+                <Link
+                  onPress={() =>
+                    this.props.navigation.navigate("Agenda_Edit", {
+                      id: item.id,
+                      name: item.nama,
+                      desc: item.deskripsi,
+                      place: item.tempat,
+                      date: item.tanggal,
+                      time: item.waktu,
+                    })
+                  }
+                >
+                  <Box w="320" h="120" p="2" bg="#FFFFFF" shadow={2}>
+                    <Text
+                      fontSize="18"
+                      color="#000000"
+                      mt="1"
+                      fontWeight="bold"
+                      ml="2"
+                    >
+                      {item.nama}
+                    </Text>
+                    <Text ml="2" mt="5px" fontSize="15">
+                      {item.tempat}
+                    </Text>
+                    <Flex direction="row">
+                      <Ionicons
+                        style={styles.iconTime}
+                        name="ios-time-outline"
+                        size={20}
+                        color={"#8D8DAA"}
+                      />
+                      <Text fontSize="13px" mt="10px" ml="5px">
+                        {item.tanggal} - {item.waktu}
+                      </Text>
+                    </Flex>
+                  </Box>
+                </Link>
+              )}
+            ></FlatList>
           </Center>
           <Text fontSize="2xl" fontWeight="700" ml="20px" mt="20px">
             Partner Kami
@@ -342,8 +268,8 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   iconTime: {
-    marginLeft: 130,
-    marginTop: 5,
+    marginLeft: 5,
+    marginTop: 10,
   },
 });
 

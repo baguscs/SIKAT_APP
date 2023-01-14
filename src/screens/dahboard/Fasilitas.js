@@ -1,20 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import {
-  NativeBaseProvider,
-  Center,
-  Image,
-  VStack,
-  Text,
-  Box,
-  Button,
-  Flex,
-  Link,
-  Input,
-  Stack,
-  FlatList,
-} from "native-base";
+import { NativeBaseProvider, Center, Text, Box, Flex, Link } from "native-base";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 class Fasilitas extends Component {
@@ -87,6 +74,36 @@ class Fasilitas extends Component {
               </Flex>
               <Text fontSize="13px" mt="-25px" pr="30px" ml="80px">
                 Anda dapat mengetahui segala agenda dan kegiatan desa disini!
+              </Text>
+            </Box>
+          </Link>
+          <Link onPress={() => this.props.navigation.navigate("Agenda_Home")}>
+            <Box
+              w="320"
+              h="100"
+              backgroundColor="#FFFFFF"
+              mt="20px"
+              borderRadius="20px"
+            >
+              <Flex direction="row">
+                <Ionicons
+                  style={styles.iconFacility}
+                  name="ios-people-outline"
+                  size={45}
+                  color={"#00A187"}
+                />
+                <Text fontSize="xl" ml="15px" mt="8px" fontWeight="bold">
+                  User
+                </Text>
+                <Ionicons
+                  style={styles.iconForward}
+                  name="ios-chevron-forward-outline"
+                  size={45}
+                  color={"#00A187"}
+                />
+              </Flex>
+              <Text fontSize="13px" mt="-25px" pr="30px" ml="80px">
+                Lihat siapa saja yang telah punya akun disini!
               </Text>
             </Box>
           </Link>

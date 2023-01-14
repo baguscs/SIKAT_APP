@@ -115,7 +115,7 @@ class Agenda_Edit extends Component {
         <StatusBar style="auto" />
         <ScrollView>
           <Flex direction="row" mt="25px">
-            <Link onPress={() => this.props.navigation.navigate("Dana_Home")}>
+            <Link onPress={() => this.props.navigation.navigate("Agenda_Home")}>
               <Ionicons
                 style={styles.iconBack}
                 name="ios-chevron-back-outline"

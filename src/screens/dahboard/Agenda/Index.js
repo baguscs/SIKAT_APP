@@ -11,6 +11,7 @@ import {
   Link,
   Input,
   FlatList,
+  ScrollView,
 } from "native-base";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -20,19 +21,28 @@ class Index extends Component {
     this.state = {
       refresh: false,
       date: "",
+      search: false,
+      show: true,
       data: [],
     };
     this.url = "http://192.168.43.181/api_sikat/agenda.php";
   }
   componentDidMount() {
-    this.getData();
+    if (this.state.search == true) {
+      this.searchData();
+      this.setState({ search: false });
+    } else {
+      this.setState({ show: true });
+      this.getData();
+    }
   }
 
   onRefresh = () => {
+    this.setState({ search: false });
     this.setState({ refresh: true }, () => {
       setTimeout(() => {
-        this.getData();
         this.setState({ refresh: false });
+        this.componentDidMount();
       }, 500);
     });
   };
@@ -49,11 +59,15 @@ class Index extends Component {
   }
 
   async searchData(keyword) {
-    await fetch(this.url + "/?operation=search&tangga=" + keyword)
+    await fetch(this.url + "/?operation=search&tanggal=" + keyword)
       .then((response) => response.json())
       .then((json) => {
-        console.log(json.data.result);
-        // this.setState({ data: json.data.result });
+        this.setState({ search: true });
+        if (json.data.result == null) {
+          this.setState({ show: false });
+        } else {
+          this.setState({ data: json.data.result });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -118,65 +132,95 @@ class Index extends Component {
               <Ionicons name="add-circle-outline" size={23} color={"#FFFFFF"} />
             </Button>
           </Flex>
-          <FlatList
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.refresh}
-                onRefresh={this.onRefresh}
-              />
-            }
-            mt="20px"
-            data={this.state.data}
-            renderItem={({ item, index }) => (
-              <Center>
-                <Link
-                  onPress={() =>
-                    this.props.navigation.navigate("Agenda_Edit", {
-                      id: item.id,
-                      name: item.nama,
-                      desc: item.deskripsi,
-                      place: item.tempat,
-                      date: item.tanggal,
-                      time: item.waktu,
-                    })
-                  }
-                >
-                  <Box w="320" h="90px" backgroundColor="#FFFFFF" mt="2px">
-                    <Text fontSize="18px" fontWeight="bold" ml="15px" mt="10px">
-                      {item.nama}
-                    </Text>
-                    <Flex direction="row">
+          {this.state.show ? (
+            <FlatList
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.state.refresh}
+                  onRefresh={this.onRefresh}
+                />
+              }
+              mt="20px"
+              data={this.state.data}
+              renderItem={({ item, index }) => (
+                <Center>
+                  <Link
+                    onPress={() =>
+                      this.props.navigation.navigate("Agenda_Edit", {
+                        id: item.id,
+                        name: item.nama,
+                        desc: item.deskripsi,
+                        place: item.tempat,
+                        date: item.tanggal,
+                        time: item.waktu,
+                      })
+                    }
+                  >
+                    <Box w="320" h="90px" backgroundColor="#FFFFFF" mt="2px">
                       <Text
-                        fontSize="13px"
-                        ml="15px"
-                        mt="2px"
+                        fontSize="18px"
                         fontWeight="bold"
+                        ml="15px"
+                        mt="10px"
                       >
-                        {item.tempat}
+                        {item.nama}
                       </Text>
-                      <Ionicons
-                        style={styles.iconForward}
-                        name="ios-chevron-forward-outline"
-                        size={45}
-                        color={"#00A187"}
-                      />
-                    </Flex>
-                    <Flex direction="row">
-                      <Ionicons
-                        style={styles.iconTime}
-                        name="ios-time-outline"
-                        size={13}
-                        color={"#8D8DAA"}
-                      />
-                      <Text fontSize="10px" mt="5px" ml="5px">
-                        {item.tanggal} - {item.waktu}
-                      </Text>
-                    </Flex>
-                  </Box>
-                </Link>
+                      <Flex direction="row">
+                        <Text
+                          fontSize="13px"
+                          ml="15px"
+                          mt="2px"
+                          fontWeight="bold"
+                        >
+                          {item.tempat}
+                        </Text>
+                        <Ionicons
+                          style={styles.iconForward}
+                          name="ios-chevron-forward-outline"
+                          size={45}
+                          color={"#00A187"}
+                        />
+                      </Flex>
+                      <Flex direction="row">
+                        <Ionicons
+                          style={styles.iconTime}
+                          name="ios-time-outline"
+                          size={13}
+                          color={"#8D8DAA"}
+                        />
+                        <Text fontSize="10px" mt="5px" ml="5px">
+                          {item.tanggal} - {item.waktu}
+                        </Text>
+                      </Flex>
+                    </Box>
+                  </Link>
+                </Center>
+              )}
+            ></FlatList>
+          ) : (
+            <ScrollView
+              nestedScrollEnabled={true}
+              backgroundColor="#F4F6F9"
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.state.refresh}
+                  onRefresh={() => {
+                    this.onRefresh();
+                  }}
+                ></RefreshControl>
+              }
+            >
+              <Center>
+                <Box w="320" h="90px" backgroundColor="#FFFFFF" mt="20px">
+                  <Center>
+                    <Text fontSize="18px" fontWeight="bold" mt="20px">
+                      Data Tidak Ditemukan
+                    </Text>
+                  </Center>
+                </Box>
               </Center>
-            )}
-          ></FlatList>
+            </ScrollView>
+          )}
         </Center>
       </NativeBaseProvider>
     );

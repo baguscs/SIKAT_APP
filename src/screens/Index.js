@@ -7,9 +7,7 @@ import Aduan from "./dahboard/Aduan";
 import Dana_Home from "./dahboard/Dana/Index";
 import Dana_Add from "./dahboard/Dana/Add";
 import Edit_Dana from "./dahboard/Dana/Edit";
-import Jadwal from "./dahboard/Jadwal";
 import Users from "./dahboard/Users";
-import Warga from "./dahboard/Warga";
 import Fasilitas from "./dahboard/Fasilitas";
 import Agenda_Home from "./dahboard/Agenda/Index";
 import Agenda_Add from "./dahboard/Agenda/Add";
@@ -25,11 +23,9 @@ export {
   Dana_Home,
   Dana_Add,
   Edit_Dana,
-  Jadwal,
-  Users,
-  Warga,
   Fasilitas,
   Agenda_Home,
   Agenda_Add,
   Agenda_Edit,
+  Users,
 };
