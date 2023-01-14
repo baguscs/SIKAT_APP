@@ -129,61 +129,38 @@ class Home extends Component {
                 </Text>
               </Box>
             </Link>
-          </Center>
-          <Flex direction="row">
             <Box
-              w="150"
-              h="145"
-              ml="20px"
-              mt="10px"
-              p="2"
-              borderRadius={20}
-              bg="#F2A846"
-              shadow={2}
-            >
-              <Ionicons
-                style={styles.iconAduan}
-                name="ios-newspaper"
-                size={40}
-                color={"#FFFFFF"}
-              />
-              <Text fontSize="md" color="#FFFFFF" mt="7px" ml="20px">
-                Aduan
-              </Text>
-              <Text ml="20px" fontSize="2xl" color="#FFFFFF">
-                320
-              </Text>
-            </Box>
-            <Box
-              w="150"
-              h="145"
-              ml="20px"
-              mt="10px"
+              w="320"
+              h="120"
+              mt="3"
               p="2"
               borderRadius={20}
               bg="#E96053"
               shadow={2}
             >
-              <Ionicons
-                style={styles.iconAduan}
-                name="ios-people"
-                size={40}
-                color={"#FFFFFF"}
-              />
-              <Text fontSize="md" color="#FFFFFF" mt="7px" ml="20px">
-                Warga
-              </Text>
-              <Text ml="20px" fontSize="2xl" color="#FFFFFF">
-                500
-              </Text>
+              <Flex direction="row">
+                <Ionicons
+                  style={styles.iconDana}
+                  name="ios-people"
+                  size={65}
+                  color={"#FFFFFF"}
+                />
+                <Text fontSize="md" color="#FFFFFF" mt="4" ml="3">
+                  Akun Warga
+                </Text>
+                <Text ml="-90px" mt="45px" fontSize="2xl" color="#FFFFFF">
+                  500
+                </Text>
+              </Flex>
             </Box>
-          </Flex>
+          </Center>
+          <Flex direction="row"></Flex>
           <Flex direction="row">
             <Text fontSize="2xl" fontWeight="700" ml="20px" mt="20px">
               Agenda Terbaru
             </Text>
-            <Link>
-              <Text fontSize="sm" left="55px" mt="28px">
+            <Link onPress={() => this.props.navigation.navigate("Agenda_Home")}>
+              <Text fontSize="sm" left="55px" mt="28px" color="#00A187">
                 Lihat Semua
               </Text>
             </Link>

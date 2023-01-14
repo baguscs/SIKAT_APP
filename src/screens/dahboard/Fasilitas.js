@@ -60,9 +60,7 @@ class Fasilitas extends Component {
               </Text>
             </Box>
           </Link>
-          <Link
-            onPress={() => this.props.navigation.navigate("DetailFasilitas")}
-          >
+          <Link onPress={() => this.props.navigation.navigate("Agenda_Home")}>
             <Box
               w="320"
               h="100"

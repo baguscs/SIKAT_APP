@@ -13,10 +13,12 @@ import {
   Forgot,
   Fasilitas,
   Users,
-  DetailFasilitas,
   Dana_Home,
   Dana_Add,
   Edit_Dana,
+  Agenda_Home,
+  Agenda_Add,
+  Agenda_Edit,
   Aduan,
   Warga,
 } from "./src/screens/Index";
@@ -37,11 +39,10 @@ function App() {
         <Stack.Screen name="Dana_Home" component={Dana_Home}></Stack.Screen>
         <Stack.Screen name="Dana_Add" component={Dana_Add}></Stack.Screen>
         <Stack.Screen name="Dana_Edit" component={Edit_Dana}></Stack.Screen>
+        <Stack.Screen name="Agenda_Home" component={Agenda_Home}></Stack.Screen>
+        <Stack.Screen name="Agenda_Add" component={Agenda_Add}></Stack.Screen>
+        <Stack.Screen name="Agenda_Edit" component={Agenda_Edit}></Stack.Screen>
         <Stack.Screen name="Home" component={TabMenu}></Stack.Screen>
-        <Stack.Screen
-          name="DetailFasilitas"
-          component={DetailFasilitas}
-        ></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
