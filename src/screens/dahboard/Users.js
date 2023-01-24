@@ -1,6 +1,7 @@
 import React from "react";
-import { Dimensions, StyleSheet, Alert } from "react-native";
+import { Dimensions, StyleSheet, Alert, RefreshControl } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import axios from "axios";
 import {
   NativeBaseProvider,
   ScrollView,
@@ -12,6 +13,7 @@ import {
   Button,
   Flex,
   Link,
+  FlatList,
   Input,
   Stack,
 } from "native-base";
@@ -23,17 +25,82 @@ const maxWidth = Dimensions.get("window").width;
 class Users extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      refresh: false,
+      name: "",
+      email: "",
+      password: "",
+      post: "",
+      telp: "",
+      born: "",
+      gender: "",
+      religion: "",
+      address: "",
+      nik: "",
+      no_kk: "",
+      status: "",
+    };
+    this.url = "http://192.168.43.181/api_sikat/profile.php";
   }
+  componentDidMount() {
+    this.getProfile();
+  }
+
+  onRefresh = () => {
+    this.setState({ refresh: true }, () => {
+      setTimeout(() => {
+        this.componentDidMount();
+        this.setState({ refresh: false });
+      }, 900);
+    });
+  };
+
+  async getProfile() {
+    const res = await axios.get("https://geolocation-db.com/json/");
+    await fetch(this.url + "/?ip=" + res.data.IPv4)
+      .then((response) => response.json())
+      .then((json) => {
+        // this.setState({ profile: json.user });
+        json.user.forEach((value) => {
+          this.setState({ name: value["nama"] });
+          this.setState({ email: value["email"] });
+          this.setState({ password: value["password"] });
+          this.setState({ post: value["jabatan"] });
+          this.setState({ telp: value["no_telp"] });
+          this.setState({ born: value["tgl_lahir"] });
+          this.setState({ gender: value["gender"] });
+          this.setState({ religion: value["agama"] });
+          this.setState({ address: value["alamat"] });
+          this.setState({ nik: value["nik"] });
+          this.setState({ no_kk: value["no_kk"] });
+          this.setState({ status: value["status"] });
+        });
+        console.log(this.state.nama);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   render() {
     return (
       <NativeBaseProvider>
         <StatusBar style="auto" />
-        <ScrollView>
+        <ScrollView
+          backgroundColor="#F4F6F9"
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refresh}
+              onRefresh={() => {
+                this.onRefresh();
+              }}
+            ></RefreshControl>
+          }
+        >
           <Box w={maxWidth} h="120px" backgroundColor="#FFFFFF">
             <Flex direction="row">
               <Text fontSize="20px" fontWeight="500" ml="20px" mt="45px">
-                Bagus Cahyo Sulistiyo
+                {this.state.name}
               </Text>
               <Image
                 ml="50px"
@@ -46,7 +113,7 @@ class Users extends React.Component {
               ></Image>
             </Flex>
             <Text ml="20px" mt="-25px" fontSize="16px">
-              089012993120
+              {this.state.telp}
             </Text>
           </Box>
           <Box w={maxWidth} h="50px" backgroundColor="#FFFFFF" mt="20px">
@@ -55,17 +122,7 @@ class Users extends React.Component {
                 Tanggal Lahir
               </Text>
               <Text fontSize="15px" position="absolute" right="20px" mt="12px">
-                12 Maret 2002
-              </Text>
-            </Flex>
-          </Box>
-          <Box w={maxWidth} h="50px" backgroundColor="#FFFFFF" mt="2px">
-            <Flex direction="row">
-              <Text fontSize="17px" ml="20px" mt="10px">
-                Umur
-              </Text>
-              <Text fontSize="15px" position="absolute" right="20px" mt="12px">
-                20
+                {this.state.born}
               </Text>
             </Flex>
           </Box>
@@ -75,7 +132,7 @@ class Users extends React.Component {
                 Jenis Kelamin
               </Text>
               <Text fontSize="15px" position="absolute" right="20px" mt="12px">
-                Laki-Laki
+                {this.state.gender}
               </Text>
             </Flex>
           </Box>
@@ -85,57 +142,37 @@ class Users extends React.Component {
                 Agama
               </Text>
               <Text fontSize="15px" position="absolute" right="20px" mt="12px">
-                Islam
+                {this.state.religion}
               </Text>
             </Flex>
           </Box>
-          <Box w={maxWidth} h="50px" backgroundColor="#FFFFFF" mt="20px">
+          <Box w={maxWidth} h="50px" backgroundColor="#FFFFFF" mt="2px">
             <Flex direction="row">
               <Text fontSize="17px" ml="20px" mt="10px">
                 Alamat
               </Text>
               <Text fontSize="15px" position="absolute" right="20px" mt="12px">
-                Jl. Sawo Bringin Gg: 06 No: 35
-              </Text>
-            </Flex>
-          </Box>
-          <Box w={maxWidth} h="50px" backgroundColor="#FFFFFF" mt="2px">
-            <Flex direction="row">
-              <Text fontSize="17px" ml="20px" mt="10px">
-                Kota
-              </Text>
-              <Text fontSize="15px" position="absolute" right="20px" mt="12px">
-                Surabaya
-              </Text>
-            </Flex>
-          </Box>
-          <Box w={maxWidth} h="50px" backgroundColor="#FFFFFF" mt="2px">
-            <Flex direction="row">
-              <Text fontSize="17px" ml="20px" mt="10px">
-                Pekerjaan
-              </Text>
-              <Text fontSize="15px" position="absolute" right="20px" mt="12px">
-                Mahasiswa
-              </Text>
-            </Flex>
-          </Box>
-          <Box w={maxWidth} h="50px" backgroundColor="#FFFFFF" mt="2px">
-            <Flex direction="row">
-              <Text fontSize="17px" ml="20px" mt="10px">
-                Status
-              </Text>
-              <Text fontSize="15px" position="absolute" right="20px" mt="12px">
-                Belum Menikah
+                {this.state.address}
               </Text>
             </Flex>
           </Box>
           <Box w={maxWidth} h="50px" backgroundColor="#FFFFFF" mt="20px">
             <Flex direction="row">
               <Text fontSize="17px" ml="20px" mt="10px">
+                Status
+              </Text>
+              <Text fontSize="15px" position="absolute" right="20px" mt="12px">
+                {this.state.status}
+              </Text>
+            </Flex>
+          </Box>
+          <Box w={maxWidth} h="50px" backgroundColor="#FFFFFF" mt="2px">
+            <Flex direction="row">
+              <Text fontSize="17px" ml="20px" mt="10px">
                 NIK
               </Text>
               <Text fontSize="15px" position="absolute" right="20px" mt="12px">
-                12043002304230001
+                {this.state.nik}
               </Text>
             </Flex>
           </Box>
@@ -145,17 +182,7 @@ class Users extends React.Component {
                 No KK
               </Text>
               <Text fontSize="15px" position="absolute" right="20px" mt="12px">
-                12320001231201232
-              </Text>
-            </Flex>
-          </Box>
-          <Box w={maxWidth} h="50px" backgroundColor="#FFFFFF" mt="2px">
-            <Flex direction="row">
-              <Text fontSize="17px" ml="20px" mt="10px">
-                Anggota Keluarga
-              </Text>
-              <Text fontSize="15px" position="absolute" right="20px" mt="12px">
-                4 Orang
+                {this.state.no_kk}
               </Text>
             </Flex>
           </Box>
@@ -171,7 +198,7 @@ class Users extends React.Component {
                   right="35px"
                   mt="12px"
                 >
-                  baguscahyo@gmail.com
+                  {this.state.email}
                 </Text>
                 <Ionicons
                   name="ios-chevron-forward-outline"
