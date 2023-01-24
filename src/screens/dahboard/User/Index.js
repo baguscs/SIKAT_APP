@@ -146,13 +146,20 @@ class Index extends Component {
                 <Center>
                   <Link
                     onPress={() =>
-                      this.props.navigation.navigate("Agenda_Edit", {
+                      this.props.navigation.navigate("User_Edit", {
                         id: item.id,
                         name: item.nama,
-                        desc: item.deskripsi,
-                        place: item.tempat,
-                        date: item.tanggal,
-                        time: item.waktu,
+                        email: item.email,
+                        password: item.password,
+                        post: item.jabatan,
+                        telp: item.no_telp,
+                        born: item.tgl_lahir,
+                        gender: item.gender,
+                        religion: item.agama,
+                        address: item.alamat,
+                        nik: item.nik,
+                        no_kk: item.no_kk,
+                        status: item.status,
                       })
                     }
                   >

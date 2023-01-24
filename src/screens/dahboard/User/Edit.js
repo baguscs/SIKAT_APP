@@ -21,24 +21,26 @@ class Add_User extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      email: "",
-      password: "",
-      post: "",
-      telp: "",
-      born: "",
-      gender: "",
-      religion: "",
-      address: "",
-      nik: "",
-      no_kk: "",
-      status: "",
+      id: this.props.route.params.id,
+      name: this.props.route.params.name,
+      email: this.props.route.params.email,
+      password: this.props.route.params.password,
+      post: this.props.route.params.post,
+      telp: this.props.route.params.telp,
+      born: this.props.route.params.born,
+      gender: this.props.route.params.gender,
+      religion: this.props.route.params.religion,
+      address: this.props.route.params.address,
+      nik: this.props.route.params.nik,
+      no_kk: this.props.route.params.no_kk,
+      status: this.props.route.params.status,
     };
 
     this.url = "http://192.168.43.181/api_sikat/users.php";
   }
 
   insertData = () => {
+    const { id } = this.state;
     const { name } = this.state;
     const { email } = this.state;
     const { password } = this.state;
@@ -52,11 +54,10 @@ class Add_User extends Component {
     const { no_kk } = this.state;
     const { status } = this.state;
 
-    var urlAction = this.url + "/?operation=create";
+    var urlAction = this.url + "/?operation=update&id=" + id;
     if (
       name == "" ||
       email == "" ||
-      password == "" ||
       post == "" ||
       telp == "" ||
       born == "" ||
@@ -115,6 +116,41 @@ class Add_User extends Component {
     }
   };
 
+  confirmDelete = (id) => {
+    const idUser = id;
+    Alert.alert(
+      "Peringatan!",
+      "Data akan dihapus secara permanen, apakah anda yakin?",
+      [
+        {
+          text: "Batal",
+          onPress: null,
+        },
+        {
+          text: "Yakin",
+          onPress: () => this.deleteData(idUser),
+        },
+      ]
+    );
+  };
+
+  async deleteData(id) {
+    var urlDestroy = this.url + "/?operation=delete&id=" + id;
+    await fetch(urlDestroy)
+      .then((response) => response.json())
+      .then((json) => {
+        Alert.alert("Sukses", "Data berhasil di hapus", [
+          {
+            text: "Oke",
+            onPress: () => this.props.navigation.navigate("User_Home"),
+          },
+        ]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   render() {
     return (
       <NativeBaseProvider>
@@ -136,8 +172,16 @@ class Add_User extends Component {
               mt="20px"
               color="#00A187"
             >
-              Tambah User
+              Edit User
             </Text>
+            <Link onPress={() => this.confirmDelete(this.state.id)}>
+              <Ionicons
+                style={styles.iconTrash}
+                name="trash-outline"
+                size={40}
+                color={"#DC0000"}
+              ></Ionicons>
+            </Link>
           </Flex>
           <Text fontSize="15px" ml="28px" mt="20px">
             Silahkan Isi Formulir dibawah ini
@@ -317,20 +361,6 @@ class Add_User extends Component {
               onChangeText={(emailUser) => this.setState({ email: emailUser })}
               value={this.state.email}
             />
-            <Text fontSize="md" fontWeight="700">
-              Password
-            </Text>
-            <Input
-              w="310"
-              type="password"
-              variant="outline"
-              placeholder="Masukkan Password"
-              isRequired={true}
-              onChangeText={(passwordUser) =>
-                this.setState({ password: passwordUser })
-              }
-              value={this.state.password}
-            />
             <Button
               width={120}
               height={"44px"}
@@ -367,6 +397,10 @@ const styles = StyleSheet.create({
   },
   datePickerStyle: {
     width: 230,
+  },
+  iconTrash: {
+    marginTop: 18,
+    marginLeft: 120,
   },
 });
 

@@ -14,6 +14,7 @@ import Agenda_Add from "./dahboard/Agenda/Add";
 import Agenda_Edit from "./dahboard/Agenda/Edit";
 import User_Home from "./dahboard/User/Index";
 import User_Add from "./dahboard/User/Add";
+import User_Edit from "./dahboard/User/Edit";
 
 export {
   Home,
@@ -31,5 +32,6 @@ export {
   Agenda_Edit,
   User_Home,
   User_Add,
+  User_Edit,
   Users,
 };
