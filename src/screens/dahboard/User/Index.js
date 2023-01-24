@@ -20,7 +20,7 @@ class Index extends Component {
     super(props);
     this.state = {
       refresh: false,
-      date: "",
+      name: "",
       search: false,
       show: true,
       data: [],
@@ -59,7 +59,7 @@ class Index extends Component {
   }
 
   async searchData(keyword) {
-    await fetch(this.url + "/?operation=search&tanggal=" + keyword)
+    await fetch(this.url + "/?operation=search&nama=" + keyword)
       .then((response) => response.json())
       .then((json) => {
         this.setState({ search: true });
@@ -105,14 +105,14 @@ class Index extends Component {
                 w="250px"
                 py="0"
                 fontSize="16px"
-                onChangeText={(keyword) => this.setState({ date: keyword })}
+                onChangeText={(keyword) => this.setState({ name: keyword })}
                 value={this.state.date}
                 InputRightElement={
                   <Button
                     size="md"
                     rounded="none"
                     backgroundColor={"#00A187"}
-                    onPress={() => this.searchData(this.state.date)}
+                    onPress={() => this.searchData(this.state.name)}
                   >
                     <Ionicons
                       name="search-outline"
@@ -121,7 +121,7 @@ class Index extends Component {
                     />
                   </Button>
                 }
-                placeholder="Cari Data Dari Tanggal"
+                placeholder="Cari Data Dari Nama"
               />
             </Box>
             <Button
