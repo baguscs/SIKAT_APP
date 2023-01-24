@@ -7,7 +7,6 @@ import Aduan from "./dahboard/Aduan";
 import Dana_Home from "./dahboard/Dana/Index";
 import Dana_Add from "./dahboard/Dana/Add";
 import Edit_Dana from "./dahboard/Dana/Edit";
-import Users from "./dahboard/Users";
 import Fasilitas from "./dahboard/Fasilitas";
 import Agenda_Home from "./dahboard/Agenda/Index";
 import Agenda_Add from "./dahboard/Agenda/Add";
@@ -15,6 +14,8 @@ import Agenda_Edit from "./dahboard/Agenda/Edit";
 import User_Home from "./dahboard/User/Index";
 import User_Add from "./dahboard/User/Add";
 import User_Edit from "./dahboard/User/Edit";
+import Profile_Home from "./dahboard/Profile/Index";
+import Profile_Email from "./dahboard/Profile/EditEmail";
 
 export {
   Home,
@@ -33,5 +34,6 @@ export {
   User_Home,
   User_Add,
   User_Edit,
-  Users,
+  Profile_Home,
+  Profile_Email,
 };

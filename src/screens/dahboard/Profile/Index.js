@@ -21,7 +21,7 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 const maxWidth = Dimensions.get("window").width;
 
-class Users extends React.Component {
+class Index extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -146,7 +146,7 @@ class Users extends React.Component {
               <Image
                 ml="50px"
                 mt="45px"
-                source={require("../../img/user.jpg")}
+                source={require("../../../img/user.jpg")}
                 resizeMode="contain"
                 size={60}
                 borderRadius={100}
@@ -227,7 +227,14 @@ class Users extends React.Component {
               </Text>
             </Flex>
           </Box>
-          <Link>
+          <Link
+            onPress={() =>
+              this.props.navigation.navigate("Profile_Email", {
+                id: this.state.id,
+                email: this.state.email,
+              })
+            }
+          >
             <Box w={maxWidth} h="50px" backgroundColor="#FFFFFF" mt="20px">
               <Flex direction="row">
                 <Text fontSize="17px" ml="20px" mt="10px">
@@ -304,4 +311,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Users;
+export default Index;

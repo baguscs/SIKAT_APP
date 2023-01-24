@@ -22,6 +22,8 @@ import {
   User_Home,
   User_Add,
   User_Edit,
+  Profile_Home,
+  Profile_Email,
   Aduan,
   Warga,
 } from "./src/screens/Index";
@@ -48,6 +50,10 @@ function App() {
         <Stack.Screen name="User_Home" component={User_Home}></Stack.Screen>
         <Stack.Screen name="User_Add" component={User_Add}></Stack.Screen>
         <Stack.Screen name="User_Edit" component={User_Edit}></Stack.Screen>
+        <Stack.Screen
+          name="Profile_Email"
+          component={Profile_Email}
+        ></Stack.Screen>
         <Stack.Screen name="Home" component={TabMenu}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
@@ -78,7 +84,7 @@ export function TabMenu() {
     >
       <Tab.Screen name="Dashboard" component={Home} />
       <Tab.Screen name="Fasilitas" component={Fasilitas} />
-      <Tab.Screen name="Users" component={Users} />
+      <Tab.Screen name="Users" component={Profile_Home} />
     </Tab.Navigator>
   );
 }
