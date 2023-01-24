@@ -13,6 +13,7 @@ import {
   ScrollView,
 } from "native-base";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import axios from "axios";
 
 class Home extends Component {
   constructor(props) {
@@ -21,6 +22,7 @@ class Home extends Component {
       refresh: false,
       dana: "",
       agenda: [],
+      name: "",
     };
 
     this.url = "http://192.168.43.181/api_sikat/dashboard.php";
@@ -52,10 +54,23 @@ class Home extends Component {
     BackHandler.addEventListener("hardwareBackPress", this.backAction);
     this.getTotalData();
     this.getAgenda();
+    this.getDataUsers();
   }
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.backAction);
+  }
+
+  async getDataUsers() {
+    const res = await axios.get("https://geolocation-db.com/json/");
+    await fetch(this.url + "/?data=users&ip=" + res.data.IPv4)
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({ name: json.data.user });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   onRefresh = () => {
@@ -117,7 +132,7 @@ class Home extends Component {
               ></Image>
             </Link>
             <Text fontSize="20px" fontWeight="700" ml="20px" mt="15px">
-              Bagus Cahyo Sulistiyo
+              {this.state.name}
             </Text>
           </Flex>
           <Center mt="20px">
@@ -146,30 +161,32 @@ class Home extends Component {
                 </Text>
               </Box>
             </Link>
-            <Box
-              w="320"
-              h="120"
-              mt="3"
-              p="2"
-              borderRadius={20}
-              bg="#E96053"
-              shadow={2}
-            >
-              <Flex direction="row">
-                <Ionicons
-                  style={styles.iconDana}
-                  name="ios-people"
-                  size={65}
-                  color={"#FFFFFF"}
-                />
-                <Text fontSize="md" color="#FFFFFF" mt="4" ml="3">
-                  Akun Warga
-                </Text>
-                <Text ml="-90px" mt="45px" fontSize="2xl" color="#FFFFFF">
-                  500
-                </Text>
-              </Flex>
-            </Box>
+            <Link onPress={() => this.props.navigation.navigate("User_Home")}>
+              <Box
+                w="320"
+                h="120"
+                mt="3"
+                p="2"
+                borderRadius={20}
+                bg="#E96053"
+                shadow={2}
+              >
+                <Flex direction="row">
+                  <Ionicons
+                    style={styles.iconDana}
+                    name="ios-people"
+                    size={65}
+                    color={"#FFFFFF"}
+                  />
+                  <Text fontSize="md" color="#FFFFFF" mt="4" ml="3">
+                    Akun Warga
+                  </Text>
+                  <Text ml="-90px" mt="45px" fontSize="2xl" color="#FFFFFF">
+                    500
+                  </Text>
+                </Flex>
+              </Box>
+            </Link>
           </Center>
           <Flex direction="row"></Flex>
           <Flex direction="row">

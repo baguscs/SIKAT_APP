@@ -19,6 +19,8 @@ import {
   Agenda_Home,
   Agenda_Add,
   Agenda_Edit,
+  User_Home,
+  User_Add,
   Aduan,
   Warga,
 } from "./src/screens/Index";
@@ -42,6 +44,8 @@ function App() {
         <Stack.Screen name="Agenda_Home" component={Agenda_Home}></Stack.Screen>
         <Stack.Screen name="Agenda_Add" component={Agenda_Add}></Stack.Screen>
         <Stack.Screen name="Agenda_Edit" component={Agenda_Edit}></Stack.Screen>
+        <Stack.Screen name="User_Home" component={User_Home}></Stack.Screen>
+        <Stack.Screen name="User_Add" component={User_Add}></Stack.Screen>
         <Stack.Screen name="Home" component={TabMenu}></Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>

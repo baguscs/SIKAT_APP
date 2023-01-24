@@ -12,6 +12,8 @@ import Fasilitas from "./dahboard/Fasilitas";
 import Agenda_Home from "./dahboard/Agenda/Index";
 import Agenda_Add from "./dahboard/Agenda/Add";
 import Agenda_Edit from "./dahboard/Agenda/Edit";
+import User_Home from "./dahboard/User/Index";
+import User_Add from "./dahboard/User/Add";
 
 export {
   Home,
@@ -27,5 +29,7 @@ export {
   Agenda_Home,
   Agenda_Add,
   Agenda_Edit,
+  User_Home,
+  User_Add,
   Users,
 };
