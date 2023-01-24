@@ -19,7 +19,6 @@ import {
 } from "native-base";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
-
 const maxWidth = Dimensions.get("window").width;
 
 class Users extends React.Component {
@@ -27,6 +26,7 @@ class Users extends React.Component {
     super(props);
     this.state = {
       refresh: false,
+      id: "",
       name: "",
       email: "",
       password: "",
@@ -62,6 +62,7 @@ class Users extends React.Component {
       .then((json) => {
         // this.setState({ profile: json.user });
         json.user.forEach((value) => {
+          this.setState({ id: value["id"] });
           this.setState({ name: value["nama"] });
           this.setState({ email: value["email"] });
           this.setState({ password: value["password"] });
@@ -76,6 +77,46 @@ class Users extends React.Component {
           this.setState({ status: value["status"] });
         });
         console.log(this.state.nama);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  confirmLogut() {
+    Alert.alert("Peringatan!!!", "Apakah anda yakin ingin Logout", [
+      {
+        text: "Tidak",
+        onPress: null,
+      },
+      {
+        text: "Yakin",
+        onPress: () => this.logoutHandle(),
+      },
+    ]);
+  }
+
+  async logoutHandle() {
+    const res = await axios.get("https://geolocation-db.com/json/");
+    // console.log(res.data.IPv4);
+    const { id } = this.state;
+    var urlAction =
+      "http://192.168.43.181/api_sikat/logout.php?ip=" +
+      res.data.IPv4 +
+      "&users_id=" +
+      id;
+
+    await fetch(urlAction)
+      .then((response) => response.json())
+      .then((json) => {
+        Alert.alert("Sukses", "Logout Berhasil", [
+          {
+            text: "Oke",
+            onPress: () => {
+              this.props.navigation.navigate("Login");
+            },
+          },
+        ]);
       })
       .catch((error) => {
         console.log(error);
@@ -232,20 +273,7 @@ class Users extends React.Component {
               </Flex>
             </Box>
           </Link>
-          <Link
-            onPress={() =>
-              Alert.alert("Peringatan!!!", "Apakah anda yakin ingin Logout", [
-                {
-                  text: "Tidak",
-                  onPress: null,
-                },
-                {
-                  text: "Yakin",
-                  onPress: () => this.props.navigation.navigate("Login"),
-                },
-              ])
-            }
-          >
+          <Link onPress={() => this.confirmLogut()}>
             <Box w={maxWidth} h="50px" backgroundColor="#FFFFFF" mt="20px">
               <Text
                 fontSize="18px"

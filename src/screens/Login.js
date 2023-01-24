@@ -26,10 +26,10 @@ class Login extends Component {
     this.url = "http://192.168.43.181/api_sikat/login.php";
   }
 
-  async getIp() {
-    const res = await axios.get("https://geolocation-db.com/json/");
-    console.log(res.data.IPv4);
-  }
+  // async getIp() {
+  //   const res = await axios.get("https://geolocation-db.com/json/");
+  //   console.log(res.data.IPv4);
+  // }
 
   async loginHandle(email, password) {
     const res = await axios.get("https://geolocation-db.com/json/");
