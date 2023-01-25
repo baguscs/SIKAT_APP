@@ -14,6 +14,7 @@ import {
   ScrollView,
 } from "native-base";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import axios from "axios";
 
 class Index extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class Index extends Component {
       search: false,
       show: true,
       data: [],
+      post: "",
     };
     this.url = "http://192.168.43.181/api_sikat/dana.php";
   }
@@ -35,6 +37,25 @@ class Index extends Component {
       this.setState({ show: true });
       this.getData();
     }
+    this.author();
+  }
+
+  async author() {
+    const res = await axios.get("https://geolocation-db.com/json/");
+    const urlAction = "http://192.168.43.181/api_sikat/autorisasi.php";
+    await fetch(urlAction + "/?ip=" + res.data.IPv4)
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.data.user == "Admin") {
+          this.setState({ post: true });
+        } else {
+          this.setState({ post: false });
+        }
+        // console.log(this.state.post);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   onRefresh = () => {
@@ -124,13 +145,21 @@ class Index extends Component {
                 placeholder="Cari Data Dari Tanggal"
               />
             </Box>
-            <Button
-              ml="20px"
-              backgroundColor={"#4CACBC"}
-              onPress={() => this.props.navigation.navigate("Dana_Add")}
-            >
-              <Ionicons name="add-circle-outline" size={23} color={"#FFFFFF"} />
-            </Button>
+            {this.state.post ? (
+              <Button
+                ml="20px"
+                backgroundColor={"#4CACBC"}
+                onPress={() => this.props.navigation.navigate("Dana_Add")}
+              >
+                <Ionicons
+                  name="add-circle-outline"
+                  size={23}
+                  color={"#FFFFFF"}
+                />
+              </Button>
+            ) : (
+              <Text></Text>
+            )}
           </Flex>
           {this.state.show ? (
             <FlatList

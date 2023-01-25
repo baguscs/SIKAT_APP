@@ -15,6 +15,7 @@ import {
   CheckIcon,
 } from "native-base";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import axios from "axios";
 
 class Edit_Dana extends Component {
   constructor(props) {
@@ -25,9 +26,32 @@ class Edit_Dana extends Component {
       dana: this.props.route.params.dana,
       desc: this.props.route.params.desc,
       date: this.props.route.params.date,
+      post: "",
     };
 
     this.url = "http://192.168.43.181/api_sikat/dana.php";
+  }
+
+  componentDidMount() {
+    this.author();
+  }
+
+  async author() {
+    const res = await axios.get("https://geolocation-db.com/json/");
+    const urlAction = "http://192.168.43.181/api_sikat/autorisasi.php";
+    await fetch(urlAction + "/?ip=" + res.data.IPv4)
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.data.user == "Admin") {
+          this.setState({ post: true });
+        } else {
+          this.setState({ post: false });
+        }
+        // console.log(this.state.post);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   updateData = () => {
@@ -129,14 +153,18 @@ class Edit_Dana extends Component {
             >
               Edit Dana
             </Text>
-            <Link onPress={() => this.confirmDelete(this.state.id)}>
-              <Ionicons
-                style={styles.iconTrash}
-                name="trash-outline"
-                size={40}
-                color={"#DC0000"}
-              ></Ionicons>
-            </Link>
+            {this.state.post ? (
+              <Link onPress={() => this.confirmDelete(this.state.id)}>
+                <Ionicons
+                  style={styles.iconTrash}
+                  name="trash-outline"
+                  size={40}
+                  color={"#DC0000"}
+                ></Ionicons>
+              </Link>
+            ) : (
+              <Text></Text>
+            )}
           </Flex>
           <VStack mt="20px" ml="25px">
             <Text fontSize="md" fontWeight="700">
@@ -199,18 +227,22 @@ class Edit_Dana extends Component {
             <Text fontSize="xs" color={"#DC0000"} mt="2px">
               Contoh: 19 Desember 2022
             </Text>
-            <Button
-              width={120}
-              height={"44px"}
-              ml="190px"
-              mt="30px"
-              _text={{ color: "#FFFFFF", fontSize: 15 }}
-              backgroundColor="#00A187"
-              borderRadius={20}
-              onPress={this.updateData}
-            >
-              Simpan
-            </Button>
+            {this.state.post ? (
+              <Button
+                width={120}
+                height={"44px"}
+                ml="190px"
+                mt="30px"
+                _text={{ color: "#FFFFFF", fontSize: 15 }}
+                backgroundColor="#00A187"
+                borderRadius={20}
+                onPress={this.updateData}
+              >
+                Simpan
+              </Button>
+            ) : (
+              <Text></Text>
+            )}
           </VStack>
         </ScrollView>
       </NativeBaseProvider>

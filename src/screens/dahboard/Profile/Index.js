@@ -257,7 +257,13 @@ class Index extends React.Component {
               </Flex>
             </Box>
           </Link>
-          <Link>
+          <Link
+            onPress={() =>
+              this.props.navigation.navigate("Profile_Password", {
+                id: this.state.id,
+              })
+            }
+          >
             <Box w={maxWidth} h="50px" backgroundColor="#FFFFFF" mt="2px">
               <Flex direction="row">
                 <Text fontSize="17px" ml="20px" mt="10px">

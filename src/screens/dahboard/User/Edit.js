@@ -16,6 +16,7 @@ import {
   Select,
 } from "native-base";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import axios from "axios";
 
 class Add_User extends Component {
   constructor(props) {
@@ -34,9 +35,32 @@ class Add_User extends Component {
       nik: this.props.route.params.nik,
       no_kk: this.props.route.params.no_kk,
       status: this.props.route.params.status,
+      userPost: "",
     };
 
     this.url = "http://192.168.43.181/api_sikat/users.php";
+  }
+
+  componentDidMount() {
+    this.author();
+  }
+
+  async author() {
+    const res = await axios.get("https://geolocation-db.com/json/");
+    const urlAction = "http://192.168.43.181/api_sikat/autorisasi.php";
+    await fetch(urlAction + "/?ip=" + res.data.IPv4)
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.data.user == "Admin") {
+          this.setState({ userPost: true });
+        } else {
+          this.setState({ userPost: false });
+        }
+        // console.log(this.state.post);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   insertData = () => {
@@ -174,14 +198,18 @@ class Add_User extends Component {
             >
               Edit User
             </Text>
-            <Link onPress={() => this.confirmDelete(this.state.id)}>
-              <Ionicons
-                style={styles.iconTrash}
-                name="trash-outline"
-                size={40}
-                color={"#DC0000"}
-              ></Ionicons>
-            </Link>
+            {this.state.userPost ? (
+              <Link onPress={() => this.confirmDelete(this.state.id)}>
+                <Ionicons
+                  style={styles.iconTrash}
+                  name="trash-outline"
+                  size={40}
+                  color={"#DC0000"}
+                ></Ionicons>
+              </Link>
+            ) : (
+              <Text></Text>
+            )}
           </Flex>
           <Text fontSize="15px" ml="28px" mt="20px">
             Silahkan Isi Formulir dibawah ini
@@ -361,19 +389,23 @@ class Add_User extends Component {
               onChangeText={(emailUser) => this.setState({ email: emailUser })}
               value={this.state.email}
             />
-            <Button
-              width={120}
-              height={"44px"}
-              ml="190px"
-              mt="30px"
-              mb="50px"
-              _text={{ color: "#FFFFFF", fontSize: 15 }}
-              backgroundColor="#00A187"
-              borderRadius={20}
-              onPress={this.insertData}
-            >
-              Simpan
-            </Button>
+            {this.state.userPost ? (
+              <Button
+                width={120}
+                height={"44px"}
+                ml="190px"
+                mt="30px"
+                mb="50px"
+                _text={{ color: "#FFFFFF", fontSize: 15 }}
+                backgroundColor="#00A187"
+                borderRadius={20}
+                onPress={this.insertData}
+              >
+                Simpan
+              </Button>
+            ) : (
+              <Text></Text>
+            )}
           </VStack>
         </ScrollView>
       </NativeBaseProvider>
