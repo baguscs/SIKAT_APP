@@ -16,6 +16,10 @@
             users();
             break;
 
+        case 'warga':
+            warga();
+            break;
+
         default:
             # code...
             break;
@@ -96,5 +100,16 @@
 
         $users['data']['user'] = $name;
         echo json_encode($users);
+    }
+
+    function warga(){
+        global $connect;
+
+        $getWarga = "SELECT * FROM users";
+        $dataWarga = mysqli_query($connect, $getWarga);
+
+        $count = mysqli_num_rows($dataWarga);
+        $warga['data']['warga'] = $count;
+        echo json_encode($warga);
     }
 ?>
