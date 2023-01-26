@@ -23,6 +23,7 @@ class Home extends Component {
       dana: "",
       agenda: [],
       name: "",
+      warga: "",
     };
 
     this.url = "http://192.168.43.181/api_sikat/dashboard.php";
@@ -55,10 +56,22 @@ class Home extends Component {
     this.getTotalData();
     this.getAgenda();
     this.getDataUsers();
+    this.getTotalWarga();
   }
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.backAction);
+  }
+
+  async getTotalWarga() {
+    await fetch(this.url + "/?data=warga")
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({ warga: json.data.warga });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   async getDataUsers() {
@@ -182,7 +195,7 @@ class Home extends Component {
                     Akun Warga
                   </Text>
                   <Text ml="-90px" mt="45px" fontSize="2xl" color="#FFFFFF">
-                    500
+                    {this.state.warga}
                   </Text>
                 </Flex>
               </Box>
