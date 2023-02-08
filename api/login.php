@@ -22,13 +22,11 @@
         $count = mysqli_num_rows($executeSession);
 
         if ($count == 1) {
-            $queryUpdateSession = "UPDATE sessions SET status='1'";
+            $queryUpdateSession = "UPDATE sessions SET status='1' WHERE users_id='$idUser'";
             $executeUpdateSession = mysqli_query($connect, $queryUpdateSession);
 
             $message = "berhasil update session";
         } else {
-            
-
             $queryCreateSession = "INSERT INTO sessions(ip_address, users_id, status) VALUE ('$ip', '$idUser', 1)";
             $executeCreateSession = mysqli_query($connect, $queryCreateSession);
 

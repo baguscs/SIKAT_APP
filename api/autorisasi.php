@@ -4,7 +4,7 @@
 
     $ip = $_GET['ip'];
 
-    $query = "SELECT * FROM sessions WHERE ip_address='$ip'";
+    $query = "SELECT * FROM sessions WHERE ip_address='$ip' AND status='1'";
     $execute = mysqli_query($connect, $query);
 
     while ($value = mysqli_fetch_array($execute)) {
